@@ -9,6 +9,8 @@ import CategoryRoutes from "./routes/CategoryRoutes.js"
 import CommodityRoutes from "./routes/CommodityRoutes.js"
 import UserRoutes from "./routes/UserRoutes.js"
 import EquipmentRoutes from "./routes/EquipmentRoutes.js"
+import path from 'path';
+
 //configure environment
 dotenv.config();
 
@@ -19,9 +21,11 @@ connectDB();
 const app = express();
 
 //middlewares
-app.use(cors(({
-  origin:"https://rich-gold-colt-boot.cyclic.app/",
-})));
+// app.use(cors(({
+//   origin:"https://rich-gold-colt-boot.cyclic.app/",
+// })));
+app.use(cors());
+app.use(express.static(path.join(__dirname,'./client/build')));
 app.use(morgan("dev"));
 app.use(express.json());
 
@@ -47,9 +51,10 @@ app.use("/api/v1/equipment",EquipmentRoutes)
 app.use("/api/v1/users", UserRoutes)
 
 
+
 //rest api
-app.get("/", (req, res) => {
-  res.send("<h1>world</h1>");
+app.use('*', function(req, res){
+  res.sendFile(path.join(__dirname,'./client/build/index.html'));
 });
 
 
